@@ -2,10 +2,24 @@ import mongoose from "mongoose"
 
 const userSchema = new mongoose.Schema(
   {
+    firstName: {
+      type: String,
+      required: true,
+      min: 2,
+      max: 50,
+    },
+    lastName: {
+      type: String,
+      required: true,
+      min: 2,
+      max: 50,
+    },
     username: {
       type: String,
       required: true,
       unique: true,
+      min: 2,
+      max: 50,
     },
     email: {
       type: String,
@@ -15,6 +29,8 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+      min: 6,
+      max: 50,
     },
     profilePicture: {
       type: String,
