@@ -3,6 +3,34 @@
 @tailwind utilities;
 
 @layer base {
+  body {
+    font-family: "Comic Neue", cursive;
+  }
+
+  * {
+    @apply box-border list-none p-0 m-0 scroll-smooth;
+  }
+
+  .h-class {
+    @apply scroll-m-20 tracking-tight;
+  }
+
+  h1 {
+    @apply h-class text-4xl font-extrabold lg:text-5xl;
+  }
+
+  h2 {
+    @apply h-class text-3xl font-semibold;
+  }
+
+  h3 {
+    @apply h-class text-2xl font-semibold;
+  }
+
+  h4 {
+    @apply h-class text-xl font-semibold;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
