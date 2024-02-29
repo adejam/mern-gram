@@ -13,7 +13,7 @@ const validationErrorBuilder = (error: ZodError<any>, statusCode = 422) => {
 
   return {
     errors,
-    ...errorHandler(statusCode, "A validation error occured").newError,
+    ...errorHandler(statusCode, "A validation error occured").error,
   }
 }
 

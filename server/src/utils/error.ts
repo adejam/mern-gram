@@ -1,6 +1,10 @@
+export interface CustomError extends Error {
+  statusCode: number
+}
+
 export const errorHandler = (statusCode: number, message: string) => {
-  const error = new Error()
-  error.message = message
-  const newError = { ...error, statusCode }
-  return { newError }
+  const newError = new Error()
+  newError.message = message
+  const error: CustomError = { ...newError, statusCode }
+  return { error }
 }
