@@ -10,6 +10,7 @@
     "build:front": "yarn build --prefix client",
     "build:prod": "yarn build:back && yarn build:front",
     "clean": "rm -rf dist && rm -rf client/dist && rm -rf data",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write ."
   },
   "keywords": [],

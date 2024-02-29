@@ -22,4 +22,9 @@ const createUserValidationSchema = z
     path: ["password"],
   })
 
-export { createUserValidationSchema }
+const sigininUserValidationSchema = z.object({
+  email: z.string().trim().email().min(2).max(50),
+  password: z.string().trim().min(8).max(50),
+})
+
+export { createUserValidationSchema, sigininUserValidationSchema }

@@ -3,6 +3,8 @@ export type User = {
   lastName: string
   username: string
   email: string
-  password: string
+  password?: string
   profilePicture?: string
 }
+
+export type LoginUser = { email: string; password: string }

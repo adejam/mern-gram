@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken"
-import { errorHandler } from "./../utils/error"
 import bcryptjs from "bcryptjs"
-import { NextFunction, Request, Response } from "express"
+import { Request, Response } from "express"
 import User from "../models/user.model"
 import {
   validationErrorBuilder,
@@ -11,19 +10,20 @@ import {
   createUserValidationSchema,
   signinUserValidationSchema,
 } from "../validation_schemas/user.schema"
+import { CustomError } from "../utils/CustomError"
+import { ICustomError } from "../utils/error"
 
-export const signup = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const signup = async (req: Request, res: Response) => {
   try {
     const data = createUserValidationSchema.parse(req.body)
-    data["password"] = bcryptjs.hashSync(data.password, 10)
+    const salt = bcryptjs.genSaltSync()
+    data["password"] = bcryptjs.hashSync(data.password, salt)
     const newUser = new User({ ...data })
 
     await newUser.save()
-    res.status(201).json({ message: "User created successfully" })
+    res
+      .status(201)
+      .json({ message: "User created successfully", success: true, data: null })
   } catch (error) {
     if (error instanceof ZodError) {
       // If the error is a ZodError (validation error), extract and format the error details
@@ -32,34 +32,34 @@ export const signup = async (
       res.status(422).json({ ...validationError })
     } else {
       // If the error is not a ZodError (e.g., database error), pass it to the error handler middleware
-      next(error)
+
+      const customError = error as unknown as ICustomError
+      res
+        .status(customError.statusCode || 500)
+        .json({ success: false, message: customError.message, data: null })
     }
   }
 }
 
-export const signin = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const signin = async (req: Request, res: Response) => {
   try {
     const { email, password } = signinUserValidationSchema.parse(req.body)
     const user = await User.findOne({ email })
-    if (!user) return next(errorHandler(404, "User not found"))
+    if (!user) throw new CustomError("User not found", 404)
 
     const validPassword = bcryptjs.compareSync(password, user.password)
-    if (!validPassword) return next(errorHandler(401, "wrong credentials"))
+    if (!validPassword) throw new CustomError("wrong credentials", 401)
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!)
 
-    // @ts-ignore
-    const { password: userPassword, ...rest } = user._doc
+    // @ts-expect-error there is an error from using ._doc... it doesn't seem to be reconized in user type
+    const { password: _userPassword, ...data } = user._doc
 
     const expiryDate = new Date(Date.now() + 3600000) // 1 hour
     res
       .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
       .status(200)
-      .json(rest)
+      .json({ success: true, message: "Signin Successful", data })
   } catch (error) {
     if (error instanceof ZodError) {
       // If the error is a ZodError (validation error), extract and format the error details
@@ -68,7 +68,10 @@ export const signin = async (
       res.status(422).json({ ...validationError })
     } else {
       // If the error is not a ZodError (e.g., database error), pass it to the error handler middleware
-      next(error)
+      const customError = error as unknown as ICustomError
+      res
+        .status(customError.statusCode || 500)
+        .json({ success: false, message: customError.message, data: null })
     }
   }
 }

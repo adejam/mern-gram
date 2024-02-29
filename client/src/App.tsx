@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom"
 import AuthLayout from "./components/layouts/auth-layout"
 import Layout from "./components/layouts/layout"
 import Home from "./pages/Home"
+import Signin from "./pages/Signin"
 import Signup from "./pages/Signup"
 
 const App = () => {
@@ -11,6 +12,7 @@ const App = () => {
         {/* public routes */}
         <Route element={<AuthLayout />}>
           <Route path="/sign-up" element={<Signup />} />
+          <Route path="/sign-in" element={<Signin />} />
         </Route>
 
         {/* HomeLayout */}
