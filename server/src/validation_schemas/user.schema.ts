@@ -8,4 +8,9 @@ const createUserValidationSchema = z.object({
   lastName: z.string().trim().min(1).max(50),
 })
 
-export { createUserValidationSchema }
+const signinUserValidationSchema = z.object({
+  email: z.string().trim().email().min(2).max(50),
+  password: z.string().trim().min(8).max(50),
+})
+
+export { createUserValidationSchema, signinUserValidationSchema }
