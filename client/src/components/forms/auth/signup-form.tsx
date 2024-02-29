@@ -21,17 +21,18 @@ import { TogglePasswordInput } from "../../ui/toggle-password-input"
 import { createUserValidationSchema } from "../../../lib/validation/user.schema"
 import { CustomLoadingButton } from "../../ui/custom-loading-button"
 import { Link } from "react-router-dom"
+import { useSignUp } from "../../../lib/react-query/mutations/auth.mutations"
 
 type FormValues = z.infer<typeof createUserValidationSchema>
 
 const SignupForm = () => {
+  const { mutate, isPending } = useSignUp()
   const form = useForm<FormValues>({
     resolver: zodResolver(createUserValidationSchema),
-    // defaultValues: {},
   })
 
   const onSubmit = (values: FormValues) => {
-    console.log(values)
+    mutate(values)
   }
 
   return (
@@ -141,7 +142,9 @@ const SignupForm = () => {
                   </FormItem>
                 )}
               />
-              <CustomLoadingButton>Sign up</CustomLoadingButton>
+              <CustomLoadingButton isLoading={isPending}>
+                Sign up
+              </CustomLoadingButton>
               <p className="text-center">
                 Already have an account?.{" "}
                 <Link className="text-blue-600" to={"/sign-in"}>
