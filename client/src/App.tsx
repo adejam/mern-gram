@@ -1,11 +1,19 @@
 import { Route, Routes } from "react-router-dom"
-import Layout from "./components/layout"
+import AuthLayout from "./components/layouts/auth-layout"
+import Layout from "./components/layouts/layout"
 import Home from "./pages/Home"
+import Signup from "./pages/Signup"
 
 const App = () => {
   return (
     <div className="flex h-screen">
       <Routes>
+        {/* public routes */}
+        <Route element={<AuthLayout />}>
+          <Route path="/sign-up" element={<Signup />} />
+        </Route>
+
+        {/* HomeLayout */}
         <Route element={<Layout />}>
           <Route index element={<Home />} />
         </Route>
