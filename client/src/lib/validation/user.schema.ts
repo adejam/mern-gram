@@ -27,4 +27,16 @@ const sigininUserValidationSchema = z.object({
   password: z.string().trim().min(8).max(50),
 })
 
-export { createUserValidationSchema, sigininUserValidationSchema }
+const updateUserValidationSchema = z.object({
+  firstName: z.string().trim().min(1, "Field is required").max(50),
+  lastName: z.string().trim().min(1, "Field is required").max(50),
+  username: z.string().trim().min(1, "Field is required").max(50),
+})
+
+export type UpdateUserType = z.infer<typeof updateUserValidationSchema>
+
+export {
+  createUserValidationSchema,
+  sigininUserValidationSchema,
+  updateUserValidationSchema,
+}

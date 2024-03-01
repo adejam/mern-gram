@@ -1,3 +1,4 @@
+import { UpdateUserType } from "../lib/validation/user.schema"
 import { LoginUser, User } from "../types"
 
 export async function signUpUser(user: User) {
@@ -56,5 +57,25 @@ export async function fetchUser() {
     }
   } catch (error) {
     return null
+  }
+}
+
+export async function updateUser(user: UpdateUserType, _id: string) {
+  try {
+    const res = await fetch(`/api/user/update/${_id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+    const data = await res.json()
+    if (!data.success) {
+      throw new Error(data.message)
+    }
+
+    return data
+  } catch (error) {
+    return error
   }
 }
