@@ -1,11 +1,13 @@
 import { Route, Routes } from "react-router-dom"
 import AuthLayout from "./components/layouts/auth-layout"
 import Layout from "./components/layouts/layout"
+import { useGetAuthUser } from "./lib/react-query/queries/auth.queries"
 import Home from "./pages/Home"
 import Signin from "./pages/Signin"
 import Signup from "./pages/Signup"
 
 const App = () => {
+  useGetAuthUser()
   return (
     <div className="flex h-screen">
       <Routes>

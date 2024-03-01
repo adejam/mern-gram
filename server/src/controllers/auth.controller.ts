@@ -12,6 +12,7 @@ import {
 } from "../validation_schemas/user.schema"
 import { CustomError } from "../utils/CustomError"
 import { ICustomError } from "../utils/error"
+import { userDataWithoutPassword } from "../helpers/user.helper"
 
 export const signup = async (req: Request, res: Response) => {
   try {
@@ -51,9 +52,7 @@ export const signin = async (req: Request, res: Response) => {
     if (!validPassword) throw new CustomError("wrong credentials", 401)
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!)
-
-    // @ts-expect-error there is an error from using ._doc... it doesn't seem to be reconized in user type
-    const { password: _userPassword, ...data } = user._doc
+    const data = userDataWithoutPassword(user)
 
     const expiryDate = new Date(Date.now() + 3600000) // 1 hour
     res

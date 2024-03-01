@@ -1,8 +1,8 @@
 import express from "express"
-import { test } from "../controllers/user.controller"
+import { fetchAuthUser } from "../controllers/user.controller"
 
 const router = express.Router()
 
-router.get("/", test)
+router.get("/", fetchAuthUser)
 
 export default router

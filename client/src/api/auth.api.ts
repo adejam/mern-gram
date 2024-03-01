@@ -50,11 +50,11 @@ export async function fetchUser() {
     })
     const data = await res.json()
     if (!data.success) {
-      throw new Error(data.message)
+      return null
+    } else {
+      return data.data
     }
-
-    return data
   } catch (error) {
-    return error
+    return null
   }
 }
