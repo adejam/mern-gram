@@ -2,7 +2,7 @@ import UpdateUserForm from "../components/forms/user/update-user-form"
 import { User } from "../types"
 
 interface Props {
-  data: User | null
+  data: User | null | undefined
   isPending: boolean
 }
 

@@ -1,6 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "react-router-dom"
-import { signInUser, signUpUser, updateUser } from "../../../api/auth.api"
+import {
+  logoutUser,
+  signInUser,
+  signUpUser,
+  updateUser,
+} from "../../../api/auth.api"
 import { LoginUser, User } from "../../../types"
 import { CREATE_USER_ACCOUNT, LOGGED_IN_USER } from "../queryKeys"
 import { toast } from "sonner"
@@ -65,6 +70,29 @@ export const useUpdateUser = () => {
           queryKey: [LOGGED_IN_USER],
         })
         toast.success(data.message)
+      } else {
+        toast.error(data.message)
+      }
+    },
+    onError() {
+      toast.error(UNKNOWN_SERVER_ERROR)
+    },
+  })
+}
+
+export const useLogoutUser = () => {
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: () => logoutUser(),
+    onSuccess(data) {
+      if (data.success) {
+        queryClient.invalidateQueries({
+          queryKey: [LOGGED_IN_USER],
+        })
+        toast.success(data.message)
+        navigate("/")
       } else {
         toast.error(data.message)
       }

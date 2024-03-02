@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import { User } from "../../types"
 
 interface Props {
-  data: User | null
+  data: User | null | undefined
   isPending: boolean
 }
 
